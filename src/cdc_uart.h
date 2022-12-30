@@ -31,4 +31,8 @@
 void cdc_uart_init(uint32_t task_prio);
 void cdc_uart_write(const uint8_t *buf, uint32_t cnt);
 
+#ifdef _TUSB_H_
+    void cdc_uart_line_coding(cdc_line_coding_t const* line_coding);
+#endif
+
 #endif

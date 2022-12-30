@@ -106,7 +106,7 @@
 #define SUMP_FLAG1_RLE_MODE2        0x8000  /* <values> reissued approximately every 256 <rle-count> fields */
 #define SUMP_FLAG1_RLE_MODE3        0xc000  /* <values> can be followed by unlimited numbers of <rle-counts> */
 
-void cdc_sump_init(void);
+void cdc_sump_init(uint32_t task_prio);
 void cdc_sump_task(void);
 void cdc_sump_line_coding(cdc_line_coding_t const* line_coding);
 

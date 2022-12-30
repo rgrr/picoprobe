@@ -46,7 +46,7 @@
 #define sump_irq_debug(format,...) ((void)0)
 #endif
 
-#define CDC_INTF        1
+#define CDC_INTF            CDC_SUMP_N
 
 #define SAMPLING_DIVIDER    4   // minimal sysclk sampling divider
 
@@ -79,9 +79,9 @@
 #define SUMP_DMA_MASK       (((1<<SUMP_DMA_CHANNELS)-1) << SUMP_DMA_CH_FIRST)
 
 #if PICO_NO_FLASH
-#define SUMP_MEMORY_SIZE    102400  // 100kB
+#define SUMP_MEMORY_SIZE    102400      // 100kB
 #else
-#define SUMP_MEMORY_SIZE    204800  // 200kB
+#define SUMP_MEMORY_SIZE    (48*1024)   // 48K
 #endif
 #define SUMP_MAX_CHUNK_SIZE 4096
 
@@ -1107,8 +1107,9 @@ cdc_sump_init_connect(void)
     picoprobe_debug("%s(): memory buffer %u bytes\n", __func__, SUMP_MEMORY_SIZE);
 }
 
-void
-cdc_sump_init(void)
+
+
+void cdc_sump_init(uint32_t task_prio)
 {
     uint i;
 
@@ -1144,6 +1145,8 @@ cdc_sump_init(void)
 
     picoprobe_debug("%s()\n", __func__);
 }
+
+
 
 #define MAX_UART_PKT 64
 void

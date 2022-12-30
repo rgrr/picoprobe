@@ -36,8 +36,12 @@
 #include "tusb.h"
 
 #include "picoprobe_config.h"
+#if TURBO_200MHZ
+    #include "hardware/vreg.h"
+#endif
 #include "probe.h"
 #include "cdc_debug.h"
+#include "cdc_sump.h"
 #include "cdc_uart.h"
 #include "dap_util.h"
 #include "get_serial.h"
@@ -79,6 +83,7 @@ static uint8_t RxDataBuffer[_DAP_PACKET_COUNT * _DAP_PACKET_SIZE];
 // prios are critical and determine throughput
 #define TUD_TASK_PRIO               (tskIDLE_PRIORITY + 20)       // uses one core continuously
 #define LED_TASK_PRIO               (tskIDLE_PRIORITY + 12)       // simple task which may interrupt everything else for periodic blinking
+#define SUMP_TASK_PRIO              (tskIDLE_PRIORITY + 10)
 #define MSC_WRITER_THREAD_PRIO      (tskIDLE_PRIORITY + 8)        // this is only running on writing UF2 files
 #define UART_TASK_PRIO              (tskIDLE_PRIORITY + 5)        // target -> host via UART
 #define RTT_CONSOLE_TASK_PRIO       (tskIDLE_PRIORITY + 5)        // target -> host via RTT
@@ -87,6 +92,18 @@ static uint8_t RxDataBuffer[_DAP_PACKET_COUNT * _DAP_PACKET_SIZE];
 
 static TaskHandle_t tud_taskhandle;
 static TaskHandle_t dap_taskhandle;
+
+
+
+void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* line_coding)
+{
+    if (itf == CDC_UART_N) {
+        cdc_uart_line_coding(line_coding);
+    }
+    else if (itf == CDC_SUMP_N) {
+        cdc_sump_line_coding(line_coding);
+    }
+}   // tud_cdc_line_coding_cb
 
 
 
@@ -165,6 +182,7 @@ void usb_thread(void *ptr)
     picoprobe_info("system starting...\n");
 
     cdc_uart_init(UART_TASK_PRIO);
+    cdc_sump_init(SUMP_TASK_PRIO);
 
 #if CFG_TUD_MSC
     msc_init(MSC_WRITER_THREAD_PRIO);
@@ -181,7 +199,13 @@ void usb_thread(void *ptr)
 int main(void)
 {
     board_init();
+
+#if TURBO_200MHZ
+    vreg_set_voltage(VREG_VOLTAGE_1_15);
+    set_sys_clock_khz(200000, true);
+#else
     set_sys_clock_khz(CPU_CLOCK / 1000, true);
+#endif
 
     usb_serial_init();
     tusb_init();

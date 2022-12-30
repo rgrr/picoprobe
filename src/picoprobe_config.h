@@ -56,7 +56,7 @@
     #define picoprobe_info(format,...) ((void)0)
 #endif
 
-#if 0  &&  !defined(NDEBUG)
+#if 1  &&  !defined(NDEBUG)
     #define picoprobe_debug(format,args...) cdc_debug_printf("(DD) " format, ## args)
 #else
     #define picoprobe_debug(format,...) ((void)0)
@@ -80,9 +80,9 @@
 #define PROBE_PIN_OFFSET    2
 #define PROBE_PIN_SWCLK     (PROBE_PIN_OFFSET + 0) // 2
 #define PROBE_PIN_SWDIO     (PROBE_PIN_OFFSET + 1) // 3
-#define PROBE_PIN_RESET     6                      // Target reset config
+#define PROBE_PIN_RESET     28                     // Target reset config
 #define PROBE_MAX_KHZ       20000U
-#define PROBE_DEFAULT_KHZ   12500U
+#define PROBE_DEFAULT_KHZ   1000U
 
 // UART config (UART target -> probe)
 #define PICOPROBE_UART_TX        4
