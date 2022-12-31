@@ -190,6 +190,7 @@ void usb_thread(void *ptr)
 
     for (;;) {
         tud_task();
+        cdc_sump_task();
         taskYIELD();    // not sure, if this triggers the scheduler
     }
 }   // usb_thread

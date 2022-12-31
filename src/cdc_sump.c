@@ -1170,8 +1170,9 @@ cdc_sump_task(void)
         uint cmd_len = tud_cdc_n_read(CDC_INTF, buf, sizeof(buf));
         sump_rx(buf, cmd_len);
     }
-    if (sump.state == SUMP_STATE_TRIGGER || sump.state == SUMP_STATE_SAMPLING)
-            led_signal_activity(1);
+    if (sump.state == SUMP_STATE_TRIGGER || sump.state == SUMP_STATE_SAMPLING) {
+            // led_signal_activity(1);
+    }
     } else if (!sump.cdc_connected) {
         sump.cdc_connected = false;
         sump_do_reset();
