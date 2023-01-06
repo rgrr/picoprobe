@@ -72,6 +72,8 @@ enum
     ITF_NUM_CDC_DEBUG_COM,
     ITF_NUM_CDC_DEBUG_DATA,
 #endif
+    ITF_NUM_CDC_SUMP_COM,
+    ITF_NUM_CDC_SUMP_DATA,
 #if CFG_TUD_MSC
     ITF_NUM_MSC,
 #endif
@@ -90,9 +92,12 @@ enum
     #define CDC_DEBUG_DATA_OUT_EP_NUM       0x09
     #define CDC_DEBUG_DATA_IN_EP_NUM        0x8a
 #endif
+#define CDC_SUMP_NOTIFICATION_EP_NUM        0x8b
+#define CDC_SUMP_DATA_OUT_EP_NUM            0x0c
+#define CDC_SUMP_DATA_IN_EP_NUM             0x8d
 #if CFG_TUD_MSC
-    #define MSC_OUT_EP_NUM                  0x0b
-    #define MSC_IN_EP_NUM                   0x8c
+    #define MSC_OUT_EP_NUM                  0x0e
+    #define MSC_IN_EP_NUM                   0x8f
 #endif
 
 #define _CONFIG_TOTAL_LEN  (TUD_CONFIG_DESC_LEN + CFG_TUD_CDC*TUD_CDC_DESC_LEN + TUD_VENDOR_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
@@ -108,6 +113,7 @@ static uint8_t const desc_hid_report[] =
     TUD_HID_REPORT_DESC_GENERIC_INOUT(CFG_TUD_HID_EP_BUFSIZE)
 };
 
+
 uint8_t const * tud_hid_descriptor_report_cb(uint8_t itf)
 {
     (void)itf;
@@ -122,23 +128,24 @@ uint8_t const desc_configuration[] =
 {
     TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
 
-    // Interface 0
-
-    // Bulk (named interface)
+    // Interface 0: Bulk (named interface)
     TUD_VENDOR_DESCRIPTOR(ITF_NUM_PROBE_VENDOR, 5, PROBE_VENDOR_OUT_EP_NUM, PROBE_VENDOR_IN_EP_NUM, 64),
 
-    // HID (named interface)
+    // Interface 1: HID (named interface)
     TUD_HID_INOUT_DESCRIPTOR(ITF_NUM_PROBE_HID, 4, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report), PROBE_HID_OUT_EP_NUM, PROBE_HID_IN_EP_NUM, CFG_TUD_HID_EP_BUFSIZE, 1),
 
-    // Interface 1 + 2
+    // Interface 2 + 3: CDC UART (target)
     TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_COM, 6, CDC_NOTIFICATION_EP_NUM, 64, CDC_DATA_OUT_EP_NUM, CDC_DATA_IN_EP_NUM, 64),
 
 #if !defined(NDEBUG)
-    // Interface 3 + 4
+    // Interface 4 + 5: CDC DEBUG (internal)
     TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_DEBUG_COM, 7, CDC_DEBUG_NOTIFICATION_EP_NUM, 64, CDC_DEBUG_DATA_OUT_EP_NUM, CDC_DEBUG_DATA_IN_EP_NUM, 64),
 #endif
 
-    // Interface 3 (if MSC is enabled)
+    // Interface 6 + 7: CDC SUMP
+    TUD_CDC_DESCRIPTOR(ITF_NUM_CDC_SUMP_COM, 9, CDC_SUMP_NOTIFICATION_EP_NUM, 64, CDC_SUMP_DATA_OUT_EP_NUM, CDC_SUMP_DATA_IN_EP_NUM, 64),
+
+    // Interface 8: MSC
 #if CFG_TUD_MSC
     TUD_MSC_DESCRIPTOR(ITF_NUM_MSC, 8, MSC_OUT_EP_NUM, MSC_IN_EP_NUM, 64),
 #endif
@@ -169,6 +176,7 @@ char const* string_desc_arr [] =
   "YAPicoprobe CDC-UART",              // 6: Interface descriptor for CDC UART (from target)
   "YAPicoprobe CDC-DEBUG",             // 7: Interface descriptor for CDC DEBUG
   "YAPicoprobe Flash Drive",           // 8: Interface descriptor for MSC interface
+  "YAPicoprobe CDC-SUMP",              // 9: Interface descriptor for CDC SUMP
 };
 
 static uint16_t _desc_str[32];

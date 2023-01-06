@@ -37,8 +37,6 @@
 #include "picoprobe_config.h"
 
 
-#define CDC_DEBUG_N           1
-
 #define STREAM_PRINTF_SIZE    10000
 #define STREAM_PRINTF_TRIGGER 32
 

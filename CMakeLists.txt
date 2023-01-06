@@ -19,9 +19,14 @@ endif()
 if (PICOPROBE_VERSION)
     add_definitions(-DGIT_HASH="${GIT_HASH}")
 endif()
+if (DEFINED ENV{TURBO_200MHZ})
+    message("TURBO_200MHZ is defined as " $ENV{TURBO_200MHZ})
+    target_compile_definitions(picoprobe PRIVATE TURBO_200MHZ=$ENV{TURBO_200MHZ})
+endif()
 
 
 add_executable(picoprobe
+        src/cdc_sump.c
         src/cdc_uart.c
         src/dap_util.c
         src/get_serial.c
@@ -105,7 +110,9 @@ target_link_libraries(picoprobe PRIVATE
         pico_unique_id
         tinyusb_device
         tinyusb_board
+        hardware_dma
         hardware_pio
+        hardware_pwm
         FreeRTOS-Kernel
         FreeRTOS-Kernel-Heap1
 )

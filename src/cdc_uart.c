@@ -34,8 +34,6 @@
 #include "led.h"
 
 
-#define CDC_UART_N            0
-
 #define STREAM_UART_SIZE      1024
 #define STREAM_UART_TRIGGER   32
 
@@ -108,16 +106,14 @@ void cdc_thread(void *ptr)
 //
 // CDC bitrate updates are reflected on \a PICOPROBE_UART_INTERFACE
 //
-void tud_cdc_line_coding_cb(uint8_t itf, cdc_line_coding_t const* line_coding)
+void cdc_uart_line_coding(cdc_line_coding_t const* line_coding)
 {
-    if (itf == CDC_UART_N) {
-        vTaskSuspend(task_uart);
-        tud_cdc_n_write_clear(CDC_UART_N);
-        tud_cdc_n_read_flush(CDC_UART_N);
-        uart_set_baudrate(PICOPROBE_UART_INTERFACE, line_coding->bit_rate);
-        vTaskResume(task_uart);
-    }
-}   // tud_cdc_line_coding_cb
+    vTaskSuspend(task_uart);
+    tud_cdc_n_write_clear(CDC_UART_N);
+    tud_cdc_n_read_flush(CDC_UART_N);
+    uart_set_baudrate(PICOPROBE_UART_INTERFACE, line_coding->bit_rate);
+    vTaskResume(task_uart);
+}   // cdc_uart_line_coding
 
 
 

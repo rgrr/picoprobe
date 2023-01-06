@@ -64,7 +64,7 @@
 //------------- CLASS -------------//
 #define CFG_TUD_HID                   1
 #if !defined(NDEBUG)
-    #define CFG_TUD_CDC               2
+    #define CFG_TUD_CDC               3
 #else
     #define CFG_TUD_CDC               1
 #endif
@@ -81,6 +81,11 @@
 
  // note: this is optimized for DAPLink write speed
 #define CFG_TUD_MSC_EP_BUFSIZE        512
+
+#define CDC_UART_N                    0
+#define CDC_DEBUG_N                   1
+#define CDC_SUMP_N                    2
+
 
 #ifdef __cplusplus
  }
