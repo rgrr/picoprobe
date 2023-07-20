@@ -30,6 +30,9 @@
 
 #include "common/tusb_common.h"
 
+#ifndef ECLIPSE_GUI
+    #define tu_static static
+#endif
 
 #ifndef CFG_TUD_NCM_IN_NTB_MAX_SIZE
     /// must be >> MTU

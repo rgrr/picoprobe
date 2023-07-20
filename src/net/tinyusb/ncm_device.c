@@ -32,10 +32,6 @@
 
 #if ECLIPSE_GUI || ( CFG_TUD_ENABLED && CFG_TUD_NCM )
 
-#if ECLIPSE_GUI
-    #define tu_static static
-#endif
-
 #include <stdio.h>
 #include "device/usbd.h"
 #include "device/usbd_pvt.h"
