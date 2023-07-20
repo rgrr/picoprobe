@@ -42,7 +42,7 @@ char usb_serial[PICO_UNIQUE_BOARD_ID_SIZE_BYTES * 2 + 1];
     /**
      * Network MAC address for global access: lwIP, TinyUSB
      */
-    uint8_t tud_network_mac_address[6];
+    const uint8_t tud_network_mac_address[6];
 #endif
 
 
@@ -56,10 +56,11 @@ void get_config_init(void)
     pico_get_unique_board_id(&uID);
 
 #if OPT_NET
-    tud_network_mac_address[0] = 0xfe;     // 0xfe is allowed for local use, never use odd numbers here (group/multicast)
+    uint8_t *tud_network_mac_address_local = (uint8_t *)tud_network_mac_address;
+    tud_network_mac_address_local[0] = 0xfe;     // 0xfe is allowed for local use, never use odd numbers here (group/multicast)
     for (int i = 1;  i < sizeof(tud_network_mac_address);  ++i)
     {
-        tud_network_mac_address[i] = uID.id[i + (PICO_UNIQUE_BOARD_ID_SIZE_BYTES - sizeof(tud_network_mac_address))];
+        tud_network_mac_address_local[i] = uID.id[i + (PICO_UNIQUE_BOARD_ID_SIZE_BYTES - sizeof(tud_network_mac_address))];
     }
 #endif
 

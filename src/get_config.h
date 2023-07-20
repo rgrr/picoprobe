@@ -130,7 +130,7 @@
 extern char usb_serial[];
 
 #if OPT_NET
-    extern uint8_t tud_network_mac_address[];
+    extern const uint8_t tud_network_mac_address[];
 #endif
 
 void get_config_init(void);

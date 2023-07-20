@@ -32,7 +32,7 @@
 #if ECLIPSE_GUI || ( CFG_TUD_ENABLED && CFG_TUD_NCM )
 
 #if ECLIPSE_GUI
-    #define tu_static static
+    #define static static
 #endif
 
 #include <stdio.h>
@@ -81,7 +81,7 @@ typedef struct {
 // INTERNAL OBJECT & FUNCTION DECLARATION
 //--------------------------------------------------------------------+
 
-CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN tu_static const ntb_parameters_t ntb_parameters = {
+CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN static const ntb_parameters_t ntb_parameters = {
         .wLength                 = sizeof(ntb_parameters_t),
         .bmNtbFormatsSupported   = 0x01,                                 // 16-bit NTB supported
         .dwNtbInMaxSize          = CFG_TUD_NCM_IN_NTB_MAX_SIZE,
@@ -96,9 +96,9 @@ CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN tu_static const ntb_parameters_t ntb_par
         .wNtbOutMaxDatagrams     = 1                                     // 0=no limit TODO set to 0
 };
 
-CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN tu_static transmit_ntb_t transmit_ntb;
+CFG_TUSB_MEM_SECTION CFG_TUSB_MEM_ALIGN static transmit_ntb_t transmit_ntb;
 
-tu_static ncm_interface_t ncm_interface;
+static ncm_interface_t ncm_interface;
 
 
 
@@ -114,7 +114,7 @@ static void ncm_prepare_for_tx(void)
 
 
 
-tu_static struct ncm_notify_struct ncm_notify_connected = {
+static struct ncm_notify_struct ncm_notify_connected = {
         .header = {
                 .bmRequestType_bit = {
                         .recipient = TUSB_REQ_RCPT_INTERFACE,
@@ -127,7 +127,7 @@ tu_static struct ncm_notify_struct ncm_notify_connected = {
         },
 };
 
-tu_static struct ncm_notify_struct ncm_notify_speed_change = {
+static struct ncm_notify_struct ncm_notify_speed_change = {
         .header = {
                 .bmRequestType_bit = {
                         .recipient = TUSB_REQ_RCPT_INTERFACE,

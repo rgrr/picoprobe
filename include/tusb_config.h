@@ -153,7 +153,7 @@
 #if OPT_NET
     #define CFG_TUD_NET_MTU           1514
     
-    extern uint8_t tud_network_mac_address[6];
+    extern const uint8_t tud_network_mac_address[6];
 #endif
 
 #ifdef __cplusplus
