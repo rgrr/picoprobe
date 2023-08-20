@@ -224,6 +224,7 @@ static void cdc_debug_command_if(uint8_t ch)
                 if (    strcmp(cmd, "net") == 0
                     ||  strcmp(cmd, "f_cpu") == 0
                     ||  strcmp(cmd, "f_swd") == 0
+                    ||  strcmp(cmd, "nick") == 0
                     ||  strcmp(cmd, "pwd") ==0) {
                     multicore_reset_core1();
                     taskDISABLE_INTERRUPTS();
